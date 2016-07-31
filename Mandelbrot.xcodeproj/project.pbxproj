@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0ACA6F961D3D77650020F156 /* CustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ACA6F951D3D77650020F156 /* CustomView.m */; };
 		0ACAD4411D47A21B00F9DD51 /* mandelbrot.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ACAD4401D47A21B00F9DD51 /* mandelbrot.m */; };
+		0AE9DE661D4CFA9800DF6B45 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AE9DE651D4CFA9800DF6B45 /* settings.png */; };
+		0AE9DE691D4D120A00DF6B45 /* SettingsViewCotrollerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AE9DE681D4D120A00DF6B45 /* SettingsViewCotrollerViewController.m */; };
 		0AF14D4D1D3A51F800F1BF9C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AF14D4C1D3A51F800F1BF9C /* main.m */; };
 		0AF14D501D3A51F800F1BF9C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AF14D4F1D3A51F800F1BF9C /* AppDelegate.m */; };
 		0AF14D531D3A51F800F1BF9C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AF14D521D3A51F800F1BF9C /* ViewController.m */; };
@@ -22,6 +24,9 @@
 		0ACA6F951D3D77650020F156 /* CustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomView.m; sourceTree = "<group>"; };
 		0ACAD43F1D47A21B00F9DD51 /* mandelbrot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mandelbrot.h; sourceTree = "<group>"; };
 		0ACAD4401D47A21B00F9DD51 /* mandelbrot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mandelbrot.m; sourceTree = "<group>"; };
+		0AE9DE651D4CFA9800DF6B45 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings.png; path = Mandelbrot/settings.png; sourceTree = "<group>"; };
+		0AE9DE671D4D120A00DF6B45 /* SettingsViewCotrollerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewCotrollerViewController.h; sourceTree = "<group>"; };
+		0AE9DE681D4D120A00DF6B45 /* SettingsViewCotrollerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewCotrollerViewController.m; sourceTree = "<group>"; };
 		0AF14D481D3A51F800F1BF9C /* Mandelbrot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mandelbrot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AF14D4C1D3A51F800F1BF9C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0AF14D4E1D3A51F800F1BF9C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -65,6 +70,8 @@
 		0AF14D4A1D3A51F800F1BF9C /* Mandelbrot */ = {
 			isa = PBXGroup;
 			children = (
+				0AE9DE671D4D120A00DF6B45 /* SettingsViewCotrollerViewController.h */,
+				0AE9DE681D4D120A00DF6B45 /* SettingsViewCotrollerViewController.m */,
 				0ACAD43F1D47A21B00F9DD51 /* mandelbrot.h */,
 				0ACAD4401D47A21B00F9DD51 /* mandelbrot.m */,
 				0AF14D4E1D3A51F800F1BF9C /* AppDelegate.h */,
@@ -93,6 +100,7 @@
 		0AF14D651D3A52E100F1BF9C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0AE9DE651D4CFA9800DF6B45 /* settings.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -154,6 +162,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AE9DE661D4CFA9800DF6B45 /* settings.png in Resources */,
 				0AF14D5B1D3A51F800F1BF9C /* LaunchScreen.storyboard in Resources */,
 				0AF14D581D3A51F800F1BF9C /* Assets.xcassets in Resources */,
 				0AF14D561D3A51F800F1BF9C /* Main.storyboard in Resources */,
@@ -172,6 +181,7 @@
 				0ACA6F961D3D77650020F156 /* CustomView.m in Sources */,
 				0AF14D501D3A51F800F1BF9C /* AppDelegate.m in Sources */,
 				0AF14D4D1D3A51F800F1BF9C /* main.m in Sources */,
+				0AE9DE691D4D120A00DF6B45 /* SettingsViewCotrollerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,8 @@
     CGPoint _originalShift;
     CGFloat _originalScale;
     bool    _block_pan;
+    UIDeviceOrientation _orientation;
+    UIButton *buttonSet;
 }
 
 @property (strong, nonatomic) CustomView* imageView;
@@ -30,8 +32,9 @@
     UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchDetected:)];
     [self.view addGestureRecognizer:pinchRecognizer];
     
- //   UIRotationGestureRecognizer *rotationRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotationDetected:)];
- //   [self.view addGestureRecognizer:rotationRecognizer];
+  /*  UIRotationGestureRecognizer *rotationRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotationDetected:)];
+    [self.view addGestureRecognizer:rotationRecognizer];
+   */
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected:)];
     tapRecognizer.numberOfTapsRequired = 2;
@@ -40,7 +43,7 @@
     panRecognizer.delegate = self;
     pinchRecognizer.delegate = self;
     _block_pan = false;
- //   rotationRecognizer.delegate = self;
+    //rotationRecognizer.delegate = self;
     // We don't need a delegate for the tapRecognizer
     
     
@@ -52,8 +55,53 @@
     _imageView.backgroundColor=[UIColor blueColor];
     [self.view addSubview : _imageView];
     
-    NSLog(@"viewDidLoad");
     
+    // Request to turn on accelerometer and begin receiving accelerometer events
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    _orientation = [[UIDevice currentDevice] orientation];
+    
+    
+    // Button
+    buttonSet = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonSet setImage:[UIImage imageNamed:@"settings.png"] forState:UIControlStateNormal];
+    buttonSet.frame = CGRectMake(self.view.bounds.size.width-65, self.view.bounds.size.height-65, 50, 50);
+    [buttonSet addTarget:self action:@selector(settings) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:buttonSet];
+    
+    [_imageView drawImageToCache];
+    
+    NSLog(@"viewDidLoad");
+}
+
+
+- (void)settings {
+    NSLog(@"settingsClicked");
+    [self performSegueWithIdentifier:@"doSettings" sender:self];
+}
+
+
+-(void) viewDidDisappear {
+    // Request to stop receiving accelerometer events and turn off accelerometer
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+}
+
+- (void)orientationChanged:(NSNotification *)notification {
+    
+    UIDeviceOrientation new_or = [[UIDevice currentDevice] orientation];
+    
+    if(new_or!=_orientation && _orientation!=UIDeviceOrientationUnknown)
+    {
+        CGRect new_rect = self.view.bounds;
+        [_imageView cacheContextResize :  new_rect.size];
+        
+        [buttonSet setFrame:CGRectMake(self.view.bounds.size.width-65, self.view.bounds.size.height-65, 50, 50)];
+
+        [_imageView drawImageToCache];
+    }
+    
+    _orientation = new_or;
 }
 
 /*
@@ -154,8 +202,13 @@
     CGFloat angle = rotationRecognizer.rotation;
     _imageView.transform = CGAffineTransformRotate(_imageView.transform, angle);
     rotationRecognizer.rotation = 0.0;
+    
+    [_imageView cacheContextResize : self.view.bounds.size ];
+    
+    [_imageView drawImageToCache ];
 }
-*/
+ */
+
 
 - (void)tapDetected:(UITapGestureRecognizer *)tapRecognizer
 {

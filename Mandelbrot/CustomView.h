@@ -32,5 +32,6 @@
 - (BOOL) initCacheContext:(CGSize)size;
 - (void) drawImageToCache;
 - (void) drawPreviewToCache;
+- (BOOL) cacheContextResize:(CGSize)size;
 
 @end

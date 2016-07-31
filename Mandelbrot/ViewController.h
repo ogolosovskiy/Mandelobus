@@ -8,12 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomView.h"
+#import "SettingsViewCotrollerViewController.h"
 
 @interface ViewController : UIViewController <UIGestureRecognizerDelegate>
-
- 
-// public
-//@property (weak, nonatomic) IBOutlet UIView *imageView;
 
 @end
 

@@ -12,9 +12,7 @@
 
 #import "mandelbrot.h"
 
-const float _initial_size = 3.0;
-const float _initial_left = - 2;
-const float _initial_up = - 2;
+const float _initial_size = 4;
 
 @implementation CustomView
 {
@@ -68,12 +66,11 @@ const float _initial_up = - 2;
        CGContextScaleCTM(context, 1, 1);
     }
     
-/*    NSLog(@" *** Draw ***");
-    NSLog(@"se.scale %f", tempScale);
+    NSLog(@" *** Draw ***");
     NSLog(@"s.bounds %.0f %.0f %.0f %.0f", self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height);
     NSLog(@"dr.rect %.0f %.0f %.0f %.0f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     NSLog(@"s.shift  %.0f %.0f ", centerdRect.origin.x, centerdRect.origin.y);
- */
+ 
     
     CGContextDrawImage(context, centerdRect, cacheImage);
     
@@ -95,11 +92,11 @@ const float _initial_up = - 2;
     
     _need_preview_transform = false;
     _scale = 1;
-    _shift.x = 0;
+    _shift.x = 50;
     _shift.y = 0;
 
     _preview_scale = 1;
-    _prview_shift.x = 0;
+    _prview_shift.x = 50;
     _prview_shift.y = 0;
 
     [self drawImageToCache];
@@ -107,6 +104,27 @@ const float _initial_up = - 2;
     return NULL!=cacheContext;
 }
 
+
+- (BOOL) cacheContextResize:(CGSize)size {
+    
+    int bitmapByteCount;
+    int	bitmapBytesPerRow;
+    
+    // Declare the number of bytes per row. Each pixel in the bitmap
+    // is represented by 4 bytes; 8 bits each of red, green, blue, and alpha.
+    bitmapBytesPerRow = (size.width * 4);
+    bitmapByteCount = (bitmapBytesPerRow * size.height);
+    
+    cacheContext = CGBitmapContextCreate (NULL, size.width, size.height, 8, bitmapBytesPerRow, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst);
+    
+    NSLog(@"cacheContextResize %.0f %.0f", size.width, size.height);
+
+    CGRect newFrame = self.frame;
+    newFrame.size = size;
+    [self setFrame:newFrame];
+    
+    return NULL!=cacheContext;
+}
 
 - (void) drawPreviewToCache
 {
@@ -128,13 +146,13 @@ const float _initial_up = - 2;
     CGContextSetLineWidth(cacheContext, 1);
     
     CGContextClearRect(cacheContext, CGRectMake(0, 0, size.width, size.height));
+    CGPoint center = CGPointMake(size.width/2, size.height/2);
 
     if(false)
     {
     
         UIColor *color = [UIColor redColor];
         CGContextSetStrokeColorWithColor(cacheContext, [color CGColor]);
-        CGPoint center = CGPointMake(size.width/2, size.height/2);
         int rectSize = 100 * _scale;
         center.x = center.x + _shift.x - rectSize/2;
         center.y = center.y + _shift.y - rectSize/2;
@@ -148,40 +166,57 @@ const float _initial_up = - 2;
     
         float proportion = size.height/size.width;
         
-        // real rect size
+        // координаты на комплексной плоскости
+        // rect size
         float cr_size = _initial_size / _scale;
         float ci_size = cr_size * proportion;
-        
-        // step for real ccordinates
+        // step
         float cr_step = cr_size / size.width;
         float ci_step = ci_size / size.height; // to do == cr_step
-        
-        // from "real" to "context" multiplexer
-        float cr_to_image_scale = size.width/cr_size;
-        float ci_to_image_scale = size.height/ci_size; // to do == cr_to_image_scale
+        // перевод из координат в контексте в комплексную плоскость
+        float cr_to_image_scale = (float)(size.width)/cr_size;
+        float ci_to_image_scale = (float)(size.height)/ci_size; // to do == cr_to_image_scale
+        // center on complex
+        float cr_center = - _shift.x / cr_to_image_scale;
+        float ci_center = - _shift.y / ci_to_image_scale;
 
-        // left up corner (real coordinates)
-        float cr_left = _initial_left / _scale;
-        float ci_up = _initial_up / _scale;
-        cr_left -= (_shift.x / cr_to_image_scale);
-        ci_up   -= (_shift.y / ci_to_image_scale);
-        
-        float shift_left = cr_left*cr_to_image_scale;
-        float shift_up = ci_up*cr_to_image_scale;
         
         float cr, ci = 0;
-        for(cr = cr_left; cr < cr_left + cr_size; cr += cr_step)
+        for(cr=cr_center-cr_size/2; cr<cr_center+cr_size/2; cr += cr_step)
         {
-            for(ci = ci_up; ci < ci_up + ci_size; ci += ci_step)
+            for(ci=ci_center-ci_size/2; ci<ci_center+ci_size/2; ci += ci_step)
             {
-                UIColor *color =  [UIColor yellowColor];// calculateColor(cr, ci);
-
+                UIColor *color =  calculateColor(cr, ci);
                 CGContextSetStrokeColorWithColor(cacheContext, [color CGColor]);
+    
+                float left  = 0;
+                // лево в комплексных координатах
+                left = cr;
+                // нужно отцентровать картинку
+                left -= cr_center-cr_size/2;
+                // в координатах контекста
+                left *= cr_to_image_scale;
+                
+                float up    = (ci - (ci_center-ci_size/2)) * ci_to_image_scale;
+                
+                CGContextAddRect(cacheContext, CGRectMake(left, up, 1, 1));
 
+
+/*                UIColor *color =  [UIColor yellowColor];
+                CGContextSetStrokeColorWithColor(cacheContext, [color CGColor]);
+                float rect_size = 1;
+                // лево в комплексных координатах
+                // в координатах контекста
+                // нужно центр в комп плоскости совместить с цетром экрана
+                float left  = (cr_center-rect_size/2) * cr_to_image_scale + size.width/2;
+                float up    = (ci_center-rect_size/2) * ci_to_image_scale + size.height/2;
                 CGContextAddRect(cacheContext, CGRectMake(
-                                                          cr*cr_to_image_scale - shift_left,
-                                                          ci*ci_to_image_scale - shift_up,
-                                                          1, 1));
+                                                          left,
+                                                          up,
+                                                          rect_size * cr_to_image_scale,
+                                                          rect_size * ci_to_image_scale));
+ */
+
                 CGContextDrawPath(cacheContext, kCGPathFillStroke);
             }
         }

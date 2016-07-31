@@ -209,6 +209,8 @@ UIColor* calculateColor(float cr, float ci) {
     // to do switch
     if(curScheme == EUltra)
     {
+        // http://linas.org/art-gallery/escape/escape.html
+        
         struct RGB rgb = {0,0,0};
         if (IterationsPerPixel < max_it) {
             rgb = UltraFractal[IterationsPerPixel % 16];
