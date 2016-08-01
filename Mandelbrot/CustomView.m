@@ -66,11 +66,11 @@ const float _initial_size = 4;
        CGContextScaleCTM(context, 1, 1);
     }
     
-    NSLog(@" *** Draw ***");
+/*    NSLog(@" *** Draw ***");
     NSLog(@"s.bounds %.0f %.0f %.0f %.0f", self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height);
     NSLog(@"dr.rect %.0f %.0f %.0f %.0f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     NSLog(@"s.shift  %.0f %.0f ", centerdRect.origin.x, centerdRect.origin.y);
- 
+ */
     
     CGContextDrawImage(context, centerdRect, cacheImage);
     
@@ -99,7 +99,7 @@ const float _initial_size = 4;
     _prview_shift.x = 50;
     _prview_shift.y = 0;
 
-    [self drawImageToCache];
+//    [self drawImageToCache];
     
     return NULL!=cacheContext;
 }
@@ -132,12 +132,9 @@ const float _initial_size = 4;
     [self setNeedsDisplay];
 }
 
-
-
-
-
-
 - (void) drawImageToCache {
+    
+    NSLog(@"drawImageToCache");
     
     // to do optimize
     CGSize size = CGSizeMake(CGBitmapContextGetWidth(cacheContext), CGBitmapContextGetHeight(cacheContext));

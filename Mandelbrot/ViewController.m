@@ -93,6 +93,7 @@
     
     if(new_or!=_orientation && _orientation!=UIDeviceOrientationUnknown)
     {
+        NSLog(@"orientationChanged");
         CGRect new_rect = self.view.bounds;
         [_imageView cacheContextResize :  new_rect.size];
         
@@ -155,12 +156,16 @@
 
     if(UIGestureRecognizerStateEnded==panRecognizer.state)
     {
+        NSLog(@"panDetected draw");
         _imageView->_prview_shift.x = 0;
         _imageView->_prview_shift.y = 0;
         [_imageView drawImageToCache];
     }
     else
+    {
+        NSLog(@"panDetected preview");
         [_imageView drawPreviewToCache];
+    }
 
 }
 
@@ -190,10 +195,14 @@
         _imageView->_shift.y *= _imageView->_preview_scale;
         _imageView->_preview_scale = 1;
         _block_pan = false;
+        NSLog(@"pinchDetected draw");
         [_imageView drawImageToCache];
     }
     else
+    {
+        NSLog(@"pinchDetected prev");
         [_imageView drawPreviewToCache];
+    }
 }
 
 /*
@@ -212,12 +221,15 @@
 
 - (void)tapDetected:(UITapGestureRecognizer *)tapRecognizer
 {
+    NSLog(@"tapDetected");
+/*
     [UIView animateWithDuration:0.25 animations:^{
         _imageView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
         _imageView.transform = CGAffineTransformIdentity;
     }];
     
     [_imageView drawImageToCache];
+ */
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

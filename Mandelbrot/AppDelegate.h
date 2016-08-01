@@ -15,3 +15,9 @@
 
 @end
 
+
+// to do progress bar drawing
+// async draw
+// layout table view
+// color for viecontroller background
+
