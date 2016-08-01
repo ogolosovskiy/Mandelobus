@@ -7,6 +7,15 @@
 //
 
 #import "SettingsViewCotrollerViewController.h"
+#import "mandelbrot.h"
+
+
+struct pal_item
+{
+    enum palletteScheme pallete;
+    char const*         name;
+};
+
 
 @interface SettingsViewController ()
 
@@ -16,11 +25,13 @@
 @implementation SettingsViewController
 
 NSArray *tableData;
+@synthesize delegate;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    tableData = [NSArray arrayWithObjects:@"Egg Benedict", @"Mushroom Risotto", @"Full Breakfast", @"Hamburger", @"Ham and Egg Sandwich", @"Creme Brelee", @"White Chocolate Donut", @"Starbucks Coffee", @"Vegetable Curry", @"Instant Noodle with Egg", @"Noodle with BBQ Pork", @"Japanese Noodle with Pork", @"Green Tea", @"Thai Shrimp Cake", @"Angry Birds Cake", @"Ham and Cheese Panini", nil];
+    
+    // to do structs inside
+    tableData = [NSArray arrayWithObjects:@"Histogramme", @"Smooth red", @"Smooth", @"Smooth2", @"UltraFractals", nil];
     
    _tabler.delegate = self;
    _tabler.dataSource = self;
@@ -60,17 +71,42 @@ NSArray *tableData;
     }
     
     cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
     return cell;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString* text = [tableData objectAtIndex:indexPath.row];
+    NSString *palName = fromPalette(curScheme);
+    if ([palName isEqual: text]) {
+        [cell setSelected:YES animated:NO];
+    }
 }
-*/
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
+{
+    
+    NSString *segue_id = [segue identifier];
+    NSLog(@"SettingsViewController prepareForSegue %@", segue_id );
+    
+    if ([[segue identifier] isEqualToString:@"showDetail"])
+    {
+        [[segue destinationViewController] setText:@"SecondViewController"];
+    }
+    else
+    {
+        [super prepareForSegue:segue sender:sender];
+    }
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString* name  = [tableData objectAtIndex:indexPath.row];
+    [[self delegate] setPalette : toPalette(name)];
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+}
 
 @end

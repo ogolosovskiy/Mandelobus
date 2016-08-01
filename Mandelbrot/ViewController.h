@@ -10,7 +10,7 @@
 #import "CustomView.h"
 #import "SettingsViewCotrollerViewController.h"
 
-@interface ViewController : UIViewController <UIGestureRecognizerDelegate>
+@interface ViewController : UIViewController <UIGestureRecognizerDelegate, SettingsViewControllerDelegate>
 
 @end
 

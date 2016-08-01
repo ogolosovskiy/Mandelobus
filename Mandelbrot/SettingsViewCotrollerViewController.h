@@ -7,11 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ViewController.h"
+#import "mandelbrot.h"
 
-@interface SettingsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 
+@protocol SettingsViewControllerDelegate
+@optional
+- (void) setPalette : (enum palletteScheme) number;
 @end
 
-
-
+@interface SettingsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+{
+}
+@property (nonatomic, assign) id  <SettingsViewControllerDelegate> delegate;
+@end

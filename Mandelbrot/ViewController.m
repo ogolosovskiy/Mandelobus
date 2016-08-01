@@ -225,6 +225,30 @@
     return YES;
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
+{
+    
+    NSString *segue_id = [segue identifier];
+    NSLog(@"ViewController prepareForSegue %@", segue_id );
+    
+    if ([[segue identifier] isEqualToString:@"doSettings"])
+    {
+        SettingsViewController* secondView =  [segue destinationViewController];
+        secondView.delegate = self;
+    }
+    else
+    {
+        [super prepareForSegue:segue sender:sender];
+    }
+}
+
+
+- (void) setPalette : (enum palletteScheme) number {
+    curScheme = number;
+    NSLog(@"setPalette %d", number);
+    [_imageView drawImageToCache];
+}
+
 
 @end
 

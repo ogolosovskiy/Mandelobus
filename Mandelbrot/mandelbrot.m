@@ -1,6 +1,47 @@
 
 #import "mandelbrot.h"
 
+enum palletteScheme curScheme = EUltra;
+
+
+enum palletteScheme toPalette(NSString* name)
+{
+    if([name isEqual:@"Histogramme"])
+    {
+        return EHistogramme;
+    }
+    if([name isEqual:@"Smooth red"])
+    {
+        return ESmoothRed;
+    }
+    if([name isEqual:@"Smooth"])
+    {
+        return ESmoothHSV;
+    }
+    if([name isEqual:@"Smooth2"])
+    {
+        return ESmoothHSV2;
+    }
+    if([name isEqual:@"UltraFractals"])
+    {
+        return EUltra;
+    }
+    
+    return EUnknown;
+}
+
+NSString* fromPalette(enum palletteScheme palette)
+{
+    switch(palette)
+    {
+        case EHistogramme: return @"Histogramme";
+        case ESmoothRed: return @"Smooth red";
+        case ESmoothHSV: return @"Smooth";
+        case ESmoothHSV2: return @"Smooth2";
+        case EUltra: return @"UltraFractals";
+        default: return @"";
+    }
+}
 
 struct RGB
 {
@@ -32,14 +73,6 @@ struct RGB UltraFractal[16] = {
     {66, 30, 15}, {25, 7, 26}, {9, 1, 47}, {4, 4, 73}, {0, 7, 100}, {12, 44, 138}, {24, 82, 177}, {57, 125, 209},
     {134, 181, 229}, {211, 236, 248}, {241, 233, 191}, {248, 201, 95}, {255, 170, 0}, {204, 128, 0}, {153, 87, 0}, {106, 52, 3} };
 
-
-enum palletteScheme { // to do English
-    EHistigramm, // just number of colors (139) spectrum
-    ESmoothRed,
-    ESmoothHSV, // smooth hsv
-    ESmoothHSV2, // smooth hsv
-    EUltra
-} curScheme = EUltra;
 
 #if curScheme == EUltra
 const int max_it = 255;
@@ -243,7 +276,7 @@ UIColor* calculateColor(float cr, float ci) {
         return smoothHSVcolor(IterationsPerPixel, zr*zr, zi*zi);
     }
     else
-    if(curScheme==EHistigramm)
+    if(curScheme==EHistogramme)
     {
         size_t pal_sz = sizeof(palette)/sizeof(palette[0]);
         struct RGB col = palette[IterationsPerPixel%pal_sz];
